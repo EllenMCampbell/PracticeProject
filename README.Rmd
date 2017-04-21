@@ -1,6 +1,6 @@
 ---
 title: "Reproduceable Research Project"
-output: html_notebook
+output: github_document
 ---
 
 This is data from Anthony (FRH Chinook).  The point of this project is to be able to play around in R and GitHub with data types we typically use in lab.  Currently we have two files as follows:
