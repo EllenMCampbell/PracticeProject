@@ -1,0 +1,40 @@
+---
+title: "Reproduceable Research Project"
+output: html_notebook
+---
+
+This is data from Anthony (FRH Chinook).  The point of this project is to be able to play around in R and GitHub with data types we typically use in lab.  Currently we have two files as follows:
+
+
+##Files
+**baseline_genotypes.csv**: typical two column genotype file with columns as follows:
+
+*column 1* = analysis ID
+
+*column 2* = GSI ID
+
+*col 3-192* = 2 column genotypes with assay order as follows (keep in mind that the data is in 2 column format, so each of these assay names will appear 2 times in a row): 
+c("Ots_94857-232", "Ots_102213-210", "Ots_104569-86", "Ots_107285-93", "Ots_110495-380", "Ots_112419-131", "Ots_118175-479", "Ots_128302-57", "Ots_131906-141", "Ots_AsnRs-60", "Ots_mybp-85", "Ots_TAPBP", "Ots_96222-525", "Ots_102414-395", "Ots_105105-613", "Ots_107806-821", "Ots_110551-64", "Ots_112820-284", "Ots_118205-61", "Ots_128693-461", "AldB1-122", "Ots_aspat-196", "Ots_myoD-364", "Ots_u07-07.161", "Ots_96500-180", "Ots_102420-494", "Ots_105132-200", "Ots_108007-208", "Ots_112876-371", "Ots_118938-325", "Ots_128757-61", "AldoB4-183", "Ots_CD59-2", "Ots_Ots311-101x", "Ots_u07-49.290", "Ots_97077-179", "Ots_102457-132", "Ots_105401-325", "Ots_108390-329", "Ots_111312-435", "Ots_113242-216", "Ots_122414-56", "Ots_129144-472", "Myc-366", "Ots_CD63", "Ots_PGK-54", "Ots_u4-92", "Ots_99550-204", "Ots_102801-308", "Ots_105407-117", "Ots_108735-302", "Ots_111666-408", "Ots_113457-40", "Ots_123048-521", "Ots_129170-683", "OTALDBINT1-SNP1", "Ots_EP-529", "Ots_Prl2", "OTSBMP-2-SNP1", "Ots_100884-287", "Ots_102867-609", "Ots_106499-70", "Ots_109693-392", "Ots_111681-657", "Ots_117043-255", "Ots_123921-111", "Ots_129458-451", "OTNAML12_1-SNP1", "Ots_GDH-81x", "Ots_RFC2-558", "OTSTF1-SNP1", "Ots_101119-381", "Ots_103041-52", "Ots_106747-239", "Ots_110064-383", "Ots_112208-722", "Ots_117242-136", "Ots_124774-477", "Ots_130720-99", "Ots_ARNT-195", "Ots_HSP90B-385", "Ots_SClkF2R2-135""S71-336", "Ots_101704-143", "Ots_104063-132", "Ots_107074-284", "Ots_110201-363", "Ots_112301-43", "Ots_117432-409", "Ots_127236-62", "Ots_131460-584", "Ots_RAG3", "Ots_MHC1", "Ots_SWS1op-182", "unk_526")
+
+**"baseline_metadata.csv"** = typical metadata file, columns are as follows:
+
+c("NMFS_DNA_ID", "BOX_ID", "BOX_POSITION", "PLATE", "PLATE_POS", "Sort", "SAMPLE_ID", "ANALYSIS_ID", "BATCH_ID", "PROJECT_NAME", "GENUS", "SPECIES", "LENGTH", "WEIGHT", "SEX", "AGE", "REPORTED_LIFE_STAGE", "PHENOTYPE", "HATCHERY_MARK", "TAG_NUMBER", "COLLECTION_DATE", "ESTIMATED_DATE", "PICKER", "PICK_DATE", "LEFTOVER_SAMPLE", "SAMPLE_COMMENTS", "NMFS_DNA_ID", "STATE_F", "COUNTY_F", "WATERSHED", "TRIB_1", "TRIB_2", "WATER_NAME", "REACH_SITE", "LATITUDE_F", "LONGITUDE_F", "HATCHERY", "STRAIN", "LOCATION_COMMENTS_F")
+
+*NMFS_ID* appears twice in this dataset--both columns should be the same and refer to a unique sample ID.  
+
+*Sample_ID* refers to the original ID the sample was given, which may not be unique. 
+
+*Length* is in milimeters. 
+
+*Weight* is in grams.
+
+Both files were read into R as follows:  
+
+```{r}
+library(tidyverse)
+genos <- read_csv("data/baseline_genotypes.csv")
+meta <- read_csv("data/baseline_metadata.csv")
+```
+
+Both files had at lease one occurance of duplicate column names (see file notes above).  R obviously complains about this, but changes the second occurance of the column name to "(Column Name)_1" to give each column a unique ID.
+
