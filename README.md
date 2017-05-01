@@ -1,6 +1,9 @@
 Reproduceable Research Project
 ================
 
+-   [Files](#files)
+    -   [File parsing problems](#file-parsing-problems)
+
 This is data from Anthony (FRH Chinook). The point of this project is to be able to play around in R and GitHub with data types we typically use in lab. Currently we have two files as follows:
 
 Files
@@ -137,13 +140,45 @@ meta <- read_csv("data/baseline_metadata.csv")
     ## See spec(...) for full column specifications.
 
     ## Warning: 893 parsing failures.
-    ##  row        col   expected     actual                         file
-    ## 1060 TAG_NUMBER an integer CWT# 42910 'data/baseline_metadata.csv'
-    ## 1061 TAG_NUMBER an integer CWT# 56303 'data/baseline_metadata.csv'
-    ## 1079 TAG_NUMBER an integer CWT# 56301 'data/baseline_metadata.csv'
-    ## 1080 TAG_NUMBER an integer CWT# 56302 'data/baseline_metadata.csv'
-    ## 1081 TAG_NUMBER an integer CWT# 56341 'data/baseline_metadata.csv'
-    ## .... .......... .......... .......... ............................
+    ##  row        col   expected     actual
+    ## 1060 TAG_NUMBER an integer CWT# 42910
+    ## 1061 TAG_NUMBER an integer CWT# 56303
+    ## 1079 TAG_NUMBER an integer CWT# 56301
+    ## 1080 TAG_NUMBER an integer CWT# 56302
+    ## 1081 TAG_NUMBER an integer CWT# 56341
+    ## .... .......... .......... ..........
     ## See problems(...) for more details.
 
 Both files had at lease one occurance of duplicate column names (see file notes above). R obviously complains about this, but changes the second occurance of the column name to "(Column Name)\_1" to give each column a unique ID.
+
+### File parsing problems
+
+There were a few problems in parsing the file. The cool thing is that the `problems()` function sends them back as a tibble so you can easily analyze them. First note that there were not obvious problems with genos:
+
+``` r
+problems(genos)
+```
+
+    ## # A tibble: 0 × 4
+    ## # ... with 4 variables: row <int>, col <int>, expected <chr>, actual <chr>
+
+`meta` had some problems. Let's categorize them by column and type of problem, using `dplyr`!!
+
+``` r
+problems(meta) %>%
+  group_by(col, expected) %>%
+  tally()
+```
+
+    ## Source: local data frame [3 x 3]
+    ## Groups: col [?]
+    ## 
+    ##          col               expected     n
+    ##        <chr>                  <chr> <int>
+    ## 1     LENGTH no trailing characters    77
+    ## 2 TAG_NUMBER             an integer   196
+    ## 3 TAG_NUMBER no trailing characters   620
+
+OK, that looks like three different types of problems in two different types of columns.
+
+Ellen! Your mission today is to solve those problems using what we learned in the readr chapter!

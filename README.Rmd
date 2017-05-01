@@ -1,6 +1,8 @@
 ---
 title: "Reproduceable Research Project"
-output: github_document
+output: 
+  github_document:
+    toc: true
 ---
 
 This is data from Anthony (FRH Chinook).  The point of this project is to be able to play around in R and GitHub with data types we typically use in lab.  Currently we have two files as follows:
@@ -38,3 +40,21 @@ meta <- read_csv("data/baseline_metadata.csv")
 
 Both files had at lease one occurance of duplicate column names (see file notes above).  R obviously complains about this, but changes the second occurance of the column name to "(Column Name)_1" to give each column a unique ID.
 
+### File parsing problems
+
+There were a few problems in parsing the file.  The cool thing is that the `problems()` function sends them
+back as a tibble so you can easily analyze them.  First note that there were not obvious problems with genos:
+```{r}
+problems(genos)
+```
+
+`meta` had some problems. Let's categorize them by column and type of problem, using `dplyr`!!
+```{r categ-probs}
+problems(meta) %>%
+  group_by(col, expected) %>%
+  tally()
+```
+
+OK, that looks like three different types of problems in two different types of columns.
+
+Ellen! Your mission today is to solve those problems using what we learned in the readr chapter!
