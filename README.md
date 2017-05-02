@@ -3,6 +3,7 @@ Reproduceable Research Project
 
 -   [Files](#files)
     -   [File parsing problems](#file-parsing-problems)
+    -   [Project Goals](#project-goals)
 
 This is data from Anthony (FRH Chinook). The point of this project is to be able to play around in R and GitHub with data types we typically use in lab. Currently we have two files as follows:
 
@@ -140,13 +141,13 @@ meta <- read_csv("data/baseline_metadata.csv")
     ## See spec(...) for full column specifications.
 
     ## Warning: 893 parsing failures.
-    ##  row        col   expected     actual
-    ## 1060 TAG_NUMBER an integer CWT# 42910
-    ## 1061 TAG_NUMBER an integer CWT# 56303
-    ## 1079 TAG_NUMBER an integer CWT# 56301
-    ## 1080 TAG_NUMBER an integer CWT# 56302
-    ## 1081 TAG_NUMBER an integer CWT# 56341
-    ## .... .......... .......... ..........
+    ##  row        col   expected     actual                         file
+    ## 1060 TAG_NUMBER an integer CWT# 42910 'data/baseline_metadata.csv'
+    ## 1061 TAG_NUMBER an integer CWT# 56303 'data/baseline_metadata.csv'
+    ## 1079 TAG_NUMBER an integer CWT# 56301 'data/baseline_metadata.csv'
+    ## 1080 TAG_NUMBER an integer CWT# 56302 'data/baseline_metadata.csv'
+    ## 1081 TAG_NUMBER an integer CWT# 56341 'data/baseline_metadata.csv'
+    ## .... .......... .......... .......... ............................
     ## See problems(...) for more details.
 
 Both files had at lease one occurance of duplicate column names (see file notes above). R obviously complains about this, but changes the second occurance of the column name to "(Column Name)\_1" to give each column a unique ID.
@@ -181,4 +182,39 @@ problems(meta) %>%
 
 OK, that looks like three different types of problems in two different types of columns.
 
-Ellen! Your mission today is to solve those problems using what we learned in the readr chapter!
+Ooops! Looks like Tag number sometimes has characters and/or decimals and length sometimes has decimals. Parsing errors probably mean that R is guessing the data type too early--Lengths should be doubles and Tags should be characters/strings. Let's set the guess max to be 2x the default to help R guess the proper data type!
+
+``` r
+meta <- read_csv("data/baseline_metadata.csv", guess_max = 2000)
+```
+
+    ## Warning: Duplicated column names deduplicated: 'NMFS_DNA_ID' =>
+    ## 'NMFS_DNA_ID_1' [27]
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   .default = col_character(),
+    ##   Sort = col_integer(),
+    ##   LENGTH = col_double()
+    ## )
+
+    ## See spec(...) for full column specifications.
+
+Good! No parsing problems this time!
+
+### Project Goals
+
+Below are our current goals for this project so far:
+
+-   Be able to squish metadata and gneotypes into one object and figure out which samples, if any, have genotypes but no metadata, or vice versa
+-   Check that none of the SNP assays have more than 2 alleles
+-   Check for duplicate genotypes (with some level of mismatching allowed)
+-   Check for samples with the same sample name, but different gneotypes
+-   Check to make sure there wasn't any excel weirdness with the dates
+-   Length vs. Weight plot to informally check for potentially mis-entered or mis-recorded length/weight
+-   Check species ID assay to make sure all are Chinook
+-   Summary statistics:
+    -   Number of individuals per population
+    -   Allele frequencies per assay per population
+-   Filter based on levels of missing data
+-   Make a map of sample locations

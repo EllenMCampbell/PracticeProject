@@ -57,4 +57,25 @@ problems(meta) %>%
 
 OK, that looks like three different types of problems in two different types of columns.
 
-Ellen! Your mission today is to solve those problems using what we learned in the readr chapter!
+Ooops!  Looks like Tag number sometimes has characters and/or decimals and length sometimes has decimals.  Parsing errors probably mean that R is guessing the data type too early--Lengths should be doubles and Tags should be characters/strings.  Let's set the guess max to be 2x the default to help R guess the proper data type!
+```{r}
+meta <- read_csv("data/baseline_metadata.csv", guess_max = 2000)
+```
+
+Good!  No parsing problems this time!
+
+### Project Goals
+Below are our current goals for this project so far:
+
+* Be able to squish metadata and gneotypes into one object and figure out which samples, if any, have genotypes but no metadata, or vice versa
+* Check that none of the SNP assays have more than 2 alleles
+* Check for duplicate genotypes (with some level of mismatching allowed)
+* Check for samples with the same sample name, but different gneotypes
+* Check to make sure there wasn't any excel weirdness with the dates
+* Length vs. Weight plot to informally check for potentially mis-entered or mis-recorded length/weight
+* Check species ID assay to make sure all are Chinook
+* Summary statistics:
+    + Number of individuals per population
+    + Allele frequencies per assay per population
+* Filter based on levels of missing data
+* Make a map of sample locations
